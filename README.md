@@ -117,8 +117,7 @@ end
 match_started
 num_rounds {NUM_ROUNDS}
 mode {MATCH_MODE}
-map_width {MAP_WIDTH}
-map_height {MAP_HEIGHT}
+map_size {MAP_WIDTH} {MAP_HEIGHT}
 num_bots {NUM_BOTS}
 your_id {YOUR_ID}
 view_radius {VIEW_RADIUS}
