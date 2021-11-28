@@ -255,4 +255,26 @@ TODO
 
 ### Формат лога матча
 
-TODO
+```
+match
+mode {MATCH_MODE}
+num_rounds {NUM_ROUNDS}
+num_bots {NUM_BOTS}
+map_size {MAP_WIDTH} {MAP_HEIGHT}
+view_radius {VIEW_RADIUS}
+mining_radius {MINING_RADIUS}
+attack_radius {ATTACK_RADIUS}
+move_time_limit {MOVE_TIME_LIMIT}
+bot_name {BOT_ID} {BOT_NAME}
+bot {BOT_ID} {X} {Y}
+bot_coins {BOT_ID} {NUM_COINS}
+block {X} {Y}
+coin {X} {Y}
+round {ROUND}
+bot {BOT_ID} {X} {Y}
+bot_coins {BOT_ID} {X} {Y}
+attack {BOT_1_ID} {BOT_2_ID}
+coin_collected {X} {Y} {BOT_ID}
+coin {X} {Y}
+match_over {BOT_ID}
+```

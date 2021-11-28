@@ -39,29 +39,46 @@ public class Match<K> {
 	// active coins
 	private final Set<Point> coins = new HashSet<>();
 
+	private final List<MatchListener<K>> listeners = new ArrayList<>();
+
 	// current round, starting from 1
 	private int round;
 
-	public Match(MatchMap map, MatchConfig config, Set<K> botKeys) {
+	public Match(MatchMap map, MatchConfig config, Map<K, String> botNames) {
+		this(map, config, botNames, Collections.emptyList());
+	}
+
+	public Match(MatchMap map, MatchConfig config, Map<K, String> botNames,
+			List<MatchListener<K>> listeners) {
 		Check.notNull(map);
 		Check.notNull(config);
-		Check.notEmpty(botKeys);
+		Check.condition(!botNames.isEmpty());
 
 		this.rnd = new Random(config.getRandomSeed());
 		this.config = config;
 		this.map = map;
 		this.mapIndex = new MapIndex(map);
+		if (listeners != null)
+			this.listeners.addAll(listeners);
 
+		// notify: match started
+		this.listeners.forEach(l -> l.matchStarted(map, config, botNames));
 		// init bots
-		initBots(botKeys);
+		initBots(botNames);
 		// spawn initial coins
 		spawnCoins(config.getCoinSpawnVolume());
 		// ready for round 1
 		round = 1;
+		// notify: round
+		this.listeners.forEach(l -> l.matchRound(round));
 	}
 
 	public int getRound() {
 		return round;
+	}
+
+	public MatchConfig getConfig() {
+		return config;
 	}
 
 	public MatchMap getMap() {
@@ -80,7 +97,7 @@ public class Match<K> {
 		// check: round <= num_rounds
 		if (round > config.getNumRounds())
 			return false;
-		// checl: at least one bot is active
+		// check: at least one bot is active
 		for (Bot<K> bot : bots.values()) {
 			if (bot.isActive())
 				return true;
@@ -88,14 +105,25 @@ public class Match<K> {
 		return false;
 	}
 
-	private void initBots(Set<K> botKeys) {
-		List<Point> init = map.getSpawnPoints();
-		Check.condition(botKeys.size() <= init.size());
+	public boolean isActive(K botKey) {
+		Check.notNull(botKey);
+		Bot<K> bot = bots.get(botKey);
+		return bot != null && bot.isActive();
+	}
+
+	private void initBots(Map<K, String> botNames) {
+		List<Point> spawnPositions = map.getSpawnPositions();
+		Check.condition(botNames.size() <= spawnPositions.size());
 
 		int i = 0;
-		for (K botKey : botKeys) {
-			Bot<K> bot = new Bot<>(botKey, init.get(i++));
-			bots.put(botKey, bot);
+		for (Map.Entry<K, String> entry : botNames.entrySet()) {
+			Bot<K> bot = new Bot<>(
+					entry.getKey(),
+					entry.getValue(),
+					spawnPositions.get(i++));
+			bots.put(bot.getKey(), bot);
+			listeners.forEach(l -> l.botSpawned(bot.getKey(), bot.getPosition()));
+			listeners.forEach(l -> l.botCoinsChanged(bot.getKey(), bot.getNumCoins()));
 		}
 	}
 
@@ -114,6 +142,8 @@ public class Match<K> {
 			if (coin == null)
 				break;
 			coins.add(coin);
+			final Point coinRef = coin;
+			listeners.forEach(l -> l.coinSpawned(coinRef));
 			exclude.add(coin);
 			reflect = i % 2 == 0 ? coin : null;
 		}
@@ -173,6 +203,15 @@ public class Match<K> {
 		return visibleBots;
 	}
 
+	public void deactivateBot(K botKey) {
+		Check.notNull(botKey);
+		Bot<K> bot = bots.get(botKey);
+		if (bot != null && bot.isActive()) {
+			bot.deactivate();
+			listeners.forEach(l -> l.matchOver(botKey));
+		}
+	}
+
 	public void completeRound(Map<K, Offset> moves) {
 		// move bots
 		moveBots(moves);
@@ -186,7 +225,25 @@ public class Match<K> {
 		if (round % config.getCoinSpawnPeriod() == 0) {
 			spawnCoins(config.getCoinSpawnVolume());
 		}
-		round++;
+		if (round < config.getNumRounds()) {
+			round++;
+			listeners.forEach(l -> l.matchRound(round));
+		} else {
+			for (Bot<K> bot : bots.values()) {
+				if (bot.isActive()) {
+					bot.deactivate();
+					listeners.forEach(l -> l.matchOver(bot.getKey()));
+				}
+			}
+		}
+	}
+
+	private static <K> void sortByCoins(List<Bot<K>> bots) {
+		if (bots == null)
+			return;
+		bots.sort(Comparator
+				.comparingInt((ToIntFunction<Bot<K>>) Bot::getNumCoins)
+				.reversed());
 	}
 
 	private void moveBots(Map<K, Offset> moves) {
@@ -197,6 +254,7 @@ public class Match<K> {
 			Bot<K> bot = bots.get(botKey);
 			Check.notNull(bot); // guaranteed by resolveMoves
 			bot.setPosition(position);
+			listeners.forEach(l -> l.botMoved(bot.getKey(), bot.getPosition()));
 		});
 	}
 
@@ -266,10 +324,15 @@ public class Match<K> {
 						.offsetTo(defending.getPosition(), map.getSize())
 						.length2();
 				if (d2 <= r2) {
-					// win
-					attacking.addCoins(defending.getNumCoins());
+					// attack
+					listeners.forEach(l -> l.attack(attacking.getKey(), defending.getKey()));
+					int winCoins = defending.getNumCoins();
 					defending.resetCoins();
+					attacking.addCoins(winCoins);
+					listeners.forEach(l -> l.botCoinsChanged(defending.getKey(), defending.getNumCoins()));
+					listeners.forEach(l -> l.botCoinsChanged(attacking.getKey(), attacking.getNumCoins()));
 					defending.deactivate();
+					listeners.forEach(l -> l.matchOver(defending.getKey()));
 				}
 			}
 		}
@@ -295,17 +358,11 @@ public class Match<K> {
 					sortByCoins(candidates);
 				// pickup coin
 				Bot<K> looter = candidates.get(0);
-				looter.addCoins(1);
 				it.remove();
+				listeners.forEach(l -> l.coinCollected(coin, looter.getKey()));
+				looter.addCoins(1);
+				listeners.forEach(l -> l.botCoinsChanged(looter.getKey(), looter.getNumCoins()));
 			}
 		}
-	}
-
-	private static <K> void sortByCoins(List<Bot<K>> bots) {
-		if (bots == null)
-			return;
-		bots.sort(Comparator
-				.comparingInt((ToIntFunction<Bot<K>>) Bot::getNumCoins)
-				.reversed());
 	}
 }

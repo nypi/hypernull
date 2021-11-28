@@ -7,9 +7,9 @@ import ru.croccode.hypernull.geometry.Size;
 
 public interface MatchMap {
 
-	int DEFAULT_VIEW_RADIUS = 16;
-	int DEFAULT_MINING_RADIUS = 3;
-	int DEFAULT_ATTACK_RADIUS = 5;
+	int DEFAULT_VIEW_RADIUS = 6;
+	int DEFAULT_MINING_RADIUS = 2;
+	int DEFAULT_ATTACK_RADIUS = 4;
 
 	Size getSize();
 
@@ -39,5 +39,5 @@ public interface MatchMap {
 		return DEFAULT_ATTACK_RADIUS;
 	}
 
-	List<Point> getSpawnPoints();
+	List<Point> getSpawnPositions();
 }

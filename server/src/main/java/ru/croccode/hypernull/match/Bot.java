@@ -8,6 +8,8 @@ public class Bot<K> {
 
 	private final K key;
 
+	private final String name;
+
 	private boolean active;
 
 	private Point position;
@@ -15,10 +17,11 @@ public class Bot<K> {
 	private int numCoins;
 
 	// package-private
-	Bot(K key, Point initPosition) {
+	Bot(K key, String name, Point initPosition) {
 		Check.notNull(key);
 
 		this.key = key;
+		this.name = name;
 		this.active = true;
 		this.position = initPosition;
 		this.numCoins = 0;
@@ -26,6 +29,10 @@ public class Bot<K> {
 
 	public K getKey() {
 		return key;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public boolean isActive() {
