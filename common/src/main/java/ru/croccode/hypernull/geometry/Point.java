@@ -113,4 +113,8 @@ public class Point {
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
+
+	public String toLog() {
+		return x + " " + y;
+	}
 }

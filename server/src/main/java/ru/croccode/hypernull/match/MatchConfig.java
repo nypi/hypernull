@@ -5,11 +5,11 @@ import ru.croccode.hypernull.util.Check;
 
 public class MatchConfig {
 
-	private final long randomSeed;
+	private final MatchMode mode;
 
 	private final int numRounds;
 
-	private final MatchMode mode;
+	private final long randomSeed;
 
 	private final long moveTimeLimit;
 

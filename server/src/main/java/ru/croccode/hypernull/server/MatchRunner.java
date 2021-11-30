@@ -93,7 +93,7 @@ public class MatchRunner implements Runnable {
 			}
 			match.completeRound(botMoves);
 		}
-
+		match.finished();
 		new ArrayList<>(botSessions.keySet()).forEach(this::closeSession);
 	}
 
