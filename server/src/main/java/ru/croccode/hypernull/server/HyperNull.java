@@ -34,6 +34,7 @@ public class HyperNull implements Runnable, Closeable {
 	private final MapRegistry mapRegistry;
 
 	private final Server server;
+	private final String matchLogsFolder;
 
 	public HyperNull(Properties properties) throws IOException {
 		Check.notNull(properties);
@@ -41,6 +42,8 @@ public class HyperNull implements Runnable, Closeable {
 		// start server
 		int serverPort = Integer.parseInt(
 				properties.getProperty("server.port", "2021"));
+
+		matchLogsFolder = properties.getProperty("match.log.folder","./matchlogs/");
 		this.server = new Server(serverPort);
 	}
 
@@ -87,7 +90,8 @@ public class HyperNull implements Runnable, Closeable {
 		MatchMap map = mapRegistry.randomMap(numBots);
 		MatchConfig config = buildMatchConfig(mode, map);
 		List<MatchListener<Integer>> listeners = Arrays.asList(
-				new AsciiMatchPrinter()
+				new AsciiMatchPrinter(),
+				new MatchFileLogger<>(this.matchLogsFolder)
 		);
 		Match<Integer> match = new Match<>(map, config, botNames, listeners);
 		new MatchRunner(match, botSessions).run();
@@ -109,6 +113,7 @@ public class HyperNull implements Runnable, Closeable {
 	}
 
 	public static void main(String[] args) throws IOException {
+		System.out.println("Запуск сервера...");
 		String configPath = args.length > 0
 				? args[0]
 				: "hypernull.properties";
