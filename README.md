@@ -278,7 +278,7 @@ bot_coins {BOT_ID} {NUM_COINS}
 coin {X} {Y}
 round {ROUND}
 bot {BOT_ID} {X} {Y}
-bot_coins {BOT_ID} {X} {Y}
+bot_coins {BOT_ID} {NUM_COINS}
 attack {BOT_1_ID} {BOT_2_ID}
 coin_collected {X} {Y} {BOT_ID}
 coin {X} {Y}
