@@ -2,6 +2,7 @@ package ru.croccode.hypernull.server;
 
 import ru.croccode.hypernull.domain.MatchMap;
 import ru.croccode.hypernull.geometry.Point;
+import ru.croccode.hypernull.geometry.Size;
 import ru.croccode.hypernull.match.MatchConfig;
 import ru.croccode.hypernull.match.MatchListener;
 
@@ -39,19 +40,30 @@ public class MatchFileLogger<K> implements MatchListener<K> {
     @Override
     public void matchStarted(MatchMap map, MatchConfig config, Map<K, String> botNames) {
         write("match");
-        for (Field declaredField : config.getClass().getDeclaredFields()) {
-            try {
-                declaredField.setAccessible(true);
-                write(declaredField.getName() + " " + declaredField.get(config));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(
-                    "Ошибка получения значения поля через рефлексию: " + e.getMessage(),
-                    e
-                );
-            }
-        }
+        write("num_bots " + botNames.size());
+        write("##MatchConfig");
+        printAllFields(config);
+        write("##MapConfig");
+        final Size mapSize = map.getSize();
+        write("map_size " + mapSize.width() + " " + mapSize.height());
+        write("view_radius " + map.getViewRadius());
+        write("mining_radius " + map.getMiningRadius());
+        write("attack_radius " + map.getAttackRadius());
+        printAllBlocks(map);
+        write("##BotsAndCoinsInfo");
         for (Map.Entry<K, String> botEntry : botNames.entrySet()) {
             write("bot_name " + botEntry.getKey() + " " + botEntry.getValue());
+        }
+    }
+
+    private void printAllBlocks(MatchMap map) {
+        for (int row = 0; row < map.getHeight(); row++) {
+            for (int column = 0; column < map.getWidth(); column++) {
+                Point somePoint = new Point(column, row);
+                if (map.isBlocked(somePoint)) {
+                    write("block " + somePoint.toLog());
+                }
+            }
         }
     }
 
@@ -62,12 +74,12 @@ public class MatchFileLogger<K> implements MatchListener<K> {
 
     @Override
     public void coinSpawned(Point position) {
-        write("coin " + position.toString());
+        write("coin " + position.toLog());
     }
 
     @Override
     public void coinCollected(Point position, K botKey) {
-        write("coin_collected " + position.toString() + " " + botKey);
+        write("coin_collected " + position.toLog() + " " + botKey);
     }
 
     @Override
@@ -77,7 +89,7 @@ public class MatchFileLogger<K> implements MatchListener<K> {
 
     @Override
     public void botMoved(K botKey, Point position) {
-        write("bot " + botKey + " " + position.toString());
+        write("bot " + botKey + " " + position.toLog());
     }
 
     @Override
@@ -102,5 +114,24 @@ public class MatchFileLogger<K> implements MatchListener<K> {
     @Override
     public void close() {
         logWriter.close();
+    }
+
+    private void printAllFields(Object someObj) {
+        final Class<?> objClass = someObj.getClass();
+        for (Field declaredField : objClass.getDeclaredFields()) {
+            try {
+                declaredField.setAccessible(true);
+                final String filedName = declaredField.getName()
+                    .replaceAll("([A-Z][a-z])", "_$1")
+                    .toLowerCase();
+                write(filedName + " " + declaredField.get(someObj));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(
+                    "Ошибка получения значения поля для класса " + objClass.getSimpleName()
+                        + " через рефлексию: " + e.getMessage(),
+                    e
+                );
+            }
+        }
     }
 }

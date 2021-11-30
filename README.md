@@ -257,18 +257,24 @@ TODO
 
 ```
 match
+num_bots {NUM_BOTS}
+##MatchConfig
 mode {MATCH_MODE}
 num_rounds {NUM_ROUNDS}
-num_bots {NUM_BOTS}
+random_seed {RANDOM_SEED}
+move_time_limit {MOVE_TIME_LIMIT}
+coin_spawn_period {COIN_SPAWN_PERIOD}
+coin_spawn_volume {COIN_SPAWN_VOLUME}
+##MapConfig
 map_size {MAP_WIDTH} {MAP_HEIGHT}
 view_radius {VIEW_RADIUS}
 mining_radius {MINING_RADIUS}
 attack_radius {ATTACK_RADIUS}
-move_time_limit {MOVE_TIME_LIMIT}
+block {X} {Y}
+##BotsAndCoinsInfo
 bot_name {BOT_ID} {BOT_NAME}
 bot {BOT_ID} {X} {Y}
 bot_coins {BOT_ID} {NUM_COINS}
-block {X} {Y}
 coin {X} {Y}
 round {ROUND}
 bot {BOT_ID} {X} {Y}
