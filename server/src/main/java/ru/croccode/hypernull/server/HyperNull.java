@@ -87,11 +87,12 @@ public class HyperNull implements Runnable, Closeable {
 			botKey++;
 		}
 
+		String matchId = MatchId.nextId();
 		MatchMap map = mapRegistry.randomMap(numBots);
 		MatchConfig config = buildMatchConfig(mode, map);
 		List<MatchListener<Integer>> listeners = Arrays.asList(
 				new AsciiMatchPrinter(),
-				new MatchFileLogger<>(this.matchLogsFolder)
+				new MatchFileLogger<>(matchId, this.matchLogsFolder)
 		);
 		Match<Integer> match = new Match<>(map, config, botNames, listeners);
 		new MatchRunner(match, botSessions).run();
@@ -113,7 +114,7 @@ public class HyperNull implements Runnable, Closeable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		System.out.println("Запуск сервера...");
+		System.out.print("¤ ¤ ¤ HyperNull...");
 		String configPath = args.length > 0
 				? args[0]
 				: "hypernull.properties";
@@ -130,6 +131,7 @@ public class HyperNull implements Runnable, Closeable {
 			app.close();
 			ThreadPools.shutdownAll();
 		})));
+		System.out.println(" READY ¤ ¤ ¤ ");
 		app.run();
 	}
 }

@@ -13,17 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.UUID;
 
 public class MatchFileLogger<K> implements MatchListener<K> {
 
-    private final static String LOG_FILE_TEMPLATE = "%s/Match_log_%s.txt";
+    private final static String LOG_FILE_TEMPLATE = "%s/match_%s.log";
 
-    private final UUID matchId;
     private final PrintWriter logWriter;
 
-    public MatchFileLogger(String logsFolder) {
-        this.matchId = UUID.randomUUID();
+    public MatchFileLogger(String matchId, String logsFolder) {
         Path path = Paths.get(logsFolder);
         try {
             Files.createDirectories(path);

@@ -18,7 +18,7 @@ public class AsciiMatchPrinter implements MatchListener<Integer> {
 
 	private static final char FREE = ' ';
 	private static final char BLOCK = 'X';
-	private static final char COIN = '*';
+	private static final char COIN = '¤';
 	private static final char VIEW_MASK = '.';
 	private static final char MINING_MASK = '+';
 	private static final char ATTACK_MASK = '-';
