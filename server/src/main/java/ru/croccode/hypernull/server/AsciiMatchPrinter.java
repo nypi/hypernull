@@ -33,11 +33,6 @@ public class AsciiMatchPrinter implements MatchListener<Integer> {
 
 	private int round;
 
-	@Override
-	public void close() {
-		//nothing
-	}
-
 	static class BotState {
 
 		String name = Strings.empty();

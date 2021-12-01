@@ -365,23 +365,4 @@ public class Match<K> {
 			}
 		}
 	}
-
-	public void finished() {
-		//TODO Надо ли оповещать через MatchListener, что матч совсем всё?
-		for (MatchListener<K> listener : listeners) {
-			try {
-				listener.close();
-			} catch (Exception e) {
-				throw new RuntimeException(
-                    String.format(
-                        "Ошибка при закрытии слушателя %s матча %s: %s",
-                        listener.getClass().getSimpleName(),
-                        this,//TODO id?
-                        e.getMessage()
-				    ),
-                    e
-                );
-			}
-		}
-	}
 }

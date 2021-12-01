@@ -5,7 +5,7 @@ import java.util.Map;
 import ru.croccode.hypernull.domain.MatchMap;
 import ru.croccode.hypernull.geometry.Point;
 
-public interface MatchListener<K> extends AutoCloseable{
+public interface MatchListener<K> {
 
 	void matchStarted(MatchMap map, MatchConfig config, Map<K, String> botNames);
 

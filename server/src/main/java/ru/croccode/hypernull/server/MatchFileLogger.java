@@ -6,6 +6,7 @@ import ru.croccode.hypernull.geometry.Size;
 import ru.croccode.hypernull.match.MatchConfig;
 import ru.croccode.hypernull.match.MatchListener;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -14,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-public class MatchFileLogger<K> implements MatchListener<K> {
+public class MatchFileLogger<K> implements MatchListener<K>, Closeable {
 
     private final static String LOG_FILE_TEMPLATE = "%s/match_%s.log";
 

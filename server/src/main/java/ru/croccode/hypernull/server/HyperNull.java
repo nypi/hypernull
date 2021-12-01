@@ -90,12 +90,14 @@ public class HyperNull implements Runnable, Closeable {
 		String matchId = MatchId.nextId();
 		MatchMap map = mapRegistry.randomMap(numBots);
 		MatchConfig config = buildMatchConfig(mode, map);
-		List<MatchListener<Integer>> listeners = Arrays.asList(
+		try (MatchFileLogger<Integer> fileLogger = new MatchFileLogger<>(matchId, this.matchLogsFolder)) {
+			List<MatchListener<Integer>> listeners = Arrays.asList(
 				new AsciiMatchPrinter(),
-				new MatchFileLogger<>(matchId, this.matchLogsFolder)
-		);
-		Match<Integer> match = new Match<>(map, config, botNames, listeners);
-		new MatchRunner(match, botSessions).run();
+				fileLogger
+			);
+			Match<Integer> match = new Match<>(map, config, botNames, listeners);
+			new MatchRunner(match, botSessions).run();
+		}
 	}
 
 	private MatchConfig buildMatchConfig(MatchMode mode, MatchMap map) {
