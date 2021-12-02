@@ -39,6 +39,7 @@ public class MatchFileLogger<K> implements MatchListener<K>, Closeable {
     public void matchStarted(String id, MatchMap map, MatchConfig config, Map<K, String> botNames) {
         write("match");
         write("match_id " + id);
+        write("match_time " + System.currentTimeMillis());
         write("num_bots " + botNames.size());
         write("##MatchConfig");
         printAllFields(config);

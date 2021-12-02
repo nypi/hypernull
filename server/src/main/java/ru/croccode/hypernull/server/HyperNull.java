@@ -44,7 +44,10 @@ public class HyperNull implements Runnable, Closeable {
 				properties.getProperty("server.port", "2021"));
 
 		matchLogsFolder = properties.getProperty("match.log.folder","./matchlogs/");
+		System.out.println("Match logs folder was set to: " + matchLogsFolder);
 		this.server = new Server(serverPort);
+		System.out.println("Server started on port: " + serverPort);
+		System.out.println("Server logs output: STDOUT");
 	}
 
 	@Override
@@ -116,7 +119,7 @@ public class HyperNull implements Runnable, Closeable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		System.out.print("¤ ¤ ¤ HyperNull...");
+		System.out.println("¤ ¤ ¤ HyperNull STARTING... ¤ ¤ ¤");
 		String configPath = args.length > 0
 				? args[0]
 				: "hypernull.properties";
@@ -133,7 +136,7 @@ public class HyperNull implements Runnable, Closeable {
 			app.close();
 			ThreadPools.shutdownAll();
 		})));
-		System.out.println(" READY ¤ ¤ ¤ ");
+		System.out.println("¤ ¤ ¤ HyperNull READY ¤ ¤ ¤ ");
 		app.run();
 	}
 }
