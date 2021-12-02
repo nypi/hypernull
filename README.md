@@ -73,6 +73,8 @@ HyperNull - восходящая звезда в мире криптовалют
 
 ## Протокол бота
 
+Текущая версия протокола: `1`
+
 Бот и сервер обмениваются сообщениями в текстовом формате.
 
 ```
@@ -90,8 +92,11 @@ end
 
 ```
 hello
+protocol_version {PROTOCOL_VERSION}
 end
 ```
+
+- `PROTOCOL_VERSION` текущая версия протокола
 
 ### register
 
@@ -115,6 +120,7 @@ end
 
 ```
 match_started
+match_id {MATCH_ID}
 num_rounds {NUM_ROUNDS}
 mode {MATCH_MODE}
 map_size {MAP_WIDTH} {MAP_HEIGHT}
@@ -127,6 +133,7 @@ move_time_limit {MOVE_TIME_LIMIT}
 end
 ```
 
+- `MATCH_ID` строковый идентификатор матча
 - `NUM_ROUNDS` количество раундов в матче
 - `MATCH_MODE` строка `FRIENDLY` или `DEATHMATCH`
 - `MAP_WIDTH` ширина карты [1, 32767]
@@ -251,28 +258,32 @@ end
 
 ### Формат карты
 
-Текстовый файл, содержащий информацию обо всех параметрах карты в формате "ключ" - значение.
+Текстовый файл с расширением `.map`, содержащий информацию обо всех параметрах карты в формате "ключ"-значение.
+
 Где:
-    - map_size - размер карты, в клетках
-    - view_radius - радиус обзора каждого бота, в клетках
-    - attack_radius - радиус атаки каждого бота, в клетках. Должен быть меньше view_radius 
-    - mining_radius - радиус сбора монет, в клетках. Должен быть меньше attack_radius
-    - block - препятствие на карте
-    - spawn_position - точка, в которой изначально может появиться бот. 
-      Количество таких позиций определяет количество ботов, на которое рассчитана карта.
+
+- `map_size` размер карты, в клетках
+- `view_radius` радиус обзора каждого бота, в клетках
+- `attack_radius` радиус атаки каждого бота, в клетках. Должен быть меньше `view_radius` 
+- `mining_radius` радиус сбора монет, в клетках. Должен быть меньше `attack_radius`
+- `block` препятствие на карте
+- `spawn_position` точка, в которой изначально может появиться бот. Количество таких позиций определяет количество ботов, на которое рассчитана карта.
+  
 ```
 map_size {MAP_WIDTH} {MAP_HEIGHT}
 view_radius {VIEW_RADIUS}
 mining_radius {MINING_RADIUS}
 attack_radius {ATTACK_RADIUS}
-block {X1} {Y1}
-block {X2} {Y2}
+block {X} {Y}
+block {X} {Y}
 ...
-spawn_position {X3} {Y3}
-spawn_position {X4} {Y4}
+spawn_position {X} {Y}
+spawn_position {X} {Y}
 ...
 ```
 ### Формат лога матча
+
+Текстотвый файл с расширением `.log`.
 
 ```
 match
