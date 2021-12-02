@@ -251,8 +251,27 @@ end
 
 ### Формат карты
 
-TODO
-
+Текстовый файл, содержащий информацию обо всех параметрах карты в формате "ключ" - значение.
+Где:
+    - map_size - размер карты, в клетках
+    - view_radius - радиус обзора каждого бота, в клетках
+    - attack_radius - радиус атаки каждого бота, в клетках. Должен быть меньше view_radius 
+    - mining_radius - радиус сбора монет, в клетках. Должен быть меньше attack_radius
+    - block - препятствие на карте
+    - spawn_position - точка, в которой изначально может появиться бот. 
+      Количество таких позиций определяет количество ботов, на которое рассчитана карта.
+```
+map_size {MAP_WIDTH} {MAP_HEIGHT}
+view_radius {VIEW_RADIUS}
+mining_radius {MINING_RADIUS}
+attack_radius {ATTACK_RADIUS}
+block {X1} {Y1}
+block {X2} {Y2}
+...
+spawn_position {X3} {Y3}
+spawn_position {X4} {Y4}
+...
+```
 ### Формат лога матча
 
 ```
