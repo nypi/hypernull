@@ -1,5 +1,6 @@
 package ru.croccode.hypernull.bot;
 
+import ru.croccode.hypernull.message.Hello;
 import ru.croccode.hypernull.message.MatchOver;
 import ru.croccode.hypernull.message.MatchStarted;
 import ru.croccode.hypernull.message.Move;
@@ -8,11 +9,11 @@ import ru.croccode.hypernull.message.Update;
 
 public interface Bot {
 
-	Register registerAs();
+	Register onHello(Hello hello);
 
-	void matchStarted(MatchStarted matchStarted);
+	void onMatchStarted(MatchStarted matchStarted);
 
-	void matchOver(MatchOver matchOver);
+	Move onUpdate(Update update);
 
-	Move makeMove(Update update);
+	void onMatchOver(MatchOver matchOver);
 }

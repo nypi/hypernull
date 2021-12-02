@@ -5,6 +5,8 @@ import ru.croccode.hypernull.domain.MatchMode;
 
 public class MatchStarted extends Message {
 
+	private String matchId;
+
 	private Integer numRounds;
 
 	private MatchMode mode;
@@ -22,6 +24,14 @@ public class MatchStarted extends Message {
 	private Integer attackRadius;
 
 	private Long moveTimeLimit;
+
+	public String getMatchId() {
+		return matchId;
+	}
+
+	public void setMatchId(String matchId) {
+		this.matchId = matchId;
+	}
 
 	public Integer getNumRounds() {
 		return numRounds;

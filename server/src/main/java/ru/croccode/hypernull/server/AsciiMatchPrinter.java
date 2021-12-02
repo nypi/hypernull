@@ -23,6 +23,8 @@ public class AsciiMatchPrinter implements MatchListener<Integer> {
 	private static final char MINING_MASK = '+';
 	private static final char ATTACK_MASK = '-';
 
+	private String matchId;
+
 	private MatchMap map;
 
 	private MatchConfig config;
@@ -45,7 +47,8 @@ public class AsciiMatchPrinter implements MatchListener<Integer> {
 	}
 
 	@Override
-	public void matchStarted(MatchMap map, MatchConfig config, Map<Integer, String> botNames) {
+	public void matchStarted(String id, MatchMap map, MatchConfig config, Map<Integer, String> botNames) {
+		this.matchId = id;
 		this.map = map;
 		this.config = config;
 		this.bots = new HashMap<>(botNames.size());
@@ -111,6 +114,8 @@ public class AsciiMatchPrinter implements MatchListener<Integer> {
 
 	private void printState() {
 		System.out.print("\033[H\033[2J");
+		if (!Strings.isNullOrEmpty(matchId))
+			System.out.println("| MATCH " + matchId );
 		System.out.println("| ROUND " + round );
 		List<Integer> botKeys = new ArrayList<>(bots.keySet());
 		botKeys.sort(Comparator.naturalOrder());

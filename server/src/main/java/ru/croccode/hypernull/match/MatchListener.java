@@ -7,7 +7,7 @@ import ru.croccode.hypernull.geometry.Point;
 
 public interface MatchListener<K> {
 
-	void matchStarted(MatchMap map, MatchConfig config, Map<K, String> botNames);
+	void matchStarted(String id, MatchMap map, MatchConfig config, Map<K, String> botNames);
 
 	void matchRound(int round);
 

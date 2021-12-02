@@ -21,6 +21,9 @@ import ru.croccode.hypernull.util.Strings;
 
 public final class Messages {
 
+	// current protocol version
+	public static final int PROTOCOL_VERSION = 1;
+
 	private Messages() {
 	}
 
@@ -116,13 +119,23 @@ public final class Messages {
 	public static List<String> formatHello(Hello message) {
 		List<String> lines = new ArrayList<>();
 		lines.add("hello");
+		if (message.getProtocolVersion() != null)
+			lines.add(formatParameter("protocol_version", message.getProtocolVersion()));
 		lines.add("end");
 		return lines;
 	}
 
 	public static Hello parseHello(List<String> lines) {
 		checkMessage(lines, "hello");
-		return new Hello();
+		Hello message = new Hello();
+		parseParameters(lines, (name, values) -> {
+			switch (name) {
+				case "protocol_version":
+					message.setProtocolVersion(Integer.parseInt(values.get(0)));
+					break;
+			}
+		});
+		return message;
 	}
 
 	// register
@@ -164,6 +177,8 @@ public final class Messages {
 	public static List<String> formatMatchStarted(MatchStarted message) {
 		List<String> lines = new ArrayList<>();
 		lines.add("match_started");
+		if (!Strings.isNullOrEmpty(message.getMatchId()))
+			lines.add(formatParameter("match_id", message.getMatchId()));
 		if (message.getNumRounds() != null)
 			lines.add(formatParameter("num_rounds", message.getNumRounds()));
 		if (message.getMode() != null)
@@ -192,6 +207,9 @@ public final class Messages {
 		MatchStarted message = new MatchStarted();
 		parseParameters(lines, (name, values) -> {
 			switch (name) {
+				case "match_id":
+					message.setMatchId(values.get(0));
+					break;
 				case "num_rounds":
 					message.setNumRounds(Integer.parseInt(values.get(0)));
 					break;

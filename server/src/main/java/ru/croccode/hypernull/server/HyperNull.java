@@ -95,7 +95,7 @@ public class HyperNull implements Runnable, Closeable {
 				new AsciiMatchPrinter(),
 				fileLogger
 			);
-			Match<Integer> match = new Match<>(map, config, botNames, listeners);
+			Match<Integer> match = new Match<>(matchId, map, config, botNames, listeners);
 			new MatchRunner(match, botSessions).run();
 		}
 	}

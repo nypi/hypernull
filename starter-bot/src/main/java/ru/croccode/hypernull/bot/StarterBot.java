@@ -8,6 +8,7 @@ import java.util.Random;
 import ru.croccode.hypernull.domain.MatchMode;
 import ru.croccode.hypernull.geometry.Offset;
 import ru.croccode.hypernull.io.SocketSession;
+import ru.croccode.hypernull.message.Hello;
 import ru.croccode.hypernull.message.MatchOver;
 import ru.croccode.hypernull.message.MatchStarted;
 import ru.croccode.hypernull.message.Move;
@@ -29,7 +30,7 @@ public class StarterBot implements Bot {
 	}
 
 	@Override
-	public Register registerAs() {
+	public Register onHello(Hello hello) {
 		Register register = new Register();
 		register.setMode(mode);
 		register.setBotName("starter-bot");
@@ -37,15 +38,11 @@ public class StarterBot implements Bot {
 	}
 
 	@Override
-	public void matchStarted(MatchStarted matchStarted) {
+	public void onMatchStarted(MatchStarted matchStarted) {
 	}
 
 	@Override
-	public void matchOver(MatchOver matchOver) {
-	}
-
-	@Override
-	public Move makeMove(Update update) {
+	public Move onUpdate(Update update) {
 		if (moveOffset == null || moveCounter > 5 + rnd.nextInt(5)) {
 			moveOffset = new Offset(
 					rnd.nextInt(3) - 1,
@@ -57,6 +54,10 @@ public class StarterBot implements Bot {
 		Move move = new Move();
 		move.setOffset(moveOffset);
 		return move;
+	}
+
+	@Override
+	public void onMatchOver(MatchOver matchOver) {
 	}
 
 	public static void main(String[] args) throws IOException {

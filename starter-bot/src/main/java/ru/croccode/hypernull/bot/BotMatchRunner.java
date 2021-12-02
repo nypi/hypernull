@@ -42,31 +42,26 @@ public class BotMatchRunner implements Runnable {
 
 	public void runImpl() throws IOException {
 		// wait for a server hello
-		session.read(Hello.class);
+		Hello hello = session.read(Hello.class);
 		// send register
-		Register register = bot.registerAs();
+		Register register = bot.onHello(hello);
 		session.write(register);
 		// wait for a match start
 		MatchStarted matchStarted = session.read(MatchStarted.class);
-		bot.matchStarted(matchStarted);
+		bot.onMatchStarted(matchStarted);
 		// wait for update
 		while (true) {
 			Message message = session.read();
 			if (message instanceof MatchOver) {
-				bot.matchOver((MatchOver)message);
+				bot.onMatchOver((MatchOver)message);
 				session.close();
 				break;
 			}
 			if (message instanceof Update) {
-				Move move = bot.makeMove((Update)message);
+				Move move = bot.onUpdate((Update)message);
 				if (move == null) {
 					move = new Move();
 					move.setOffset(new Offset(0, 0));
-				}
-				try {
-					Thread.sleep(300);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
 				}
 				session.write(move);
 			}

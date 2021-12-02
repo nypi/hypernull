@@ -96,7 +96,7 @@ protocol_version {PROTOCOL_VERSION}
 end
 ```
 
-- `PROTOCOL_VERSION` текущая версия протокола
+- `PROTOCOL_VERSION` текущая версия протокола (целое число)
 
 ### register
 

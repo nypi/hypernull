@@ -18,6 +18,7 @@ import ru.croccode.hypernull.domain.MatchMode;
 import ru.croccode.hypernull.geometry.Offset;
 import ru.croccode.hypernull.geometry.Point;
 import ru.croccode.hypernull.util.Check;
+import ru.croccode.hypernull.util.Strings;
 
 // K - bot key type
 public class Match<K> {
@@ -26,6 +27,8 @@ public class Match<K> {
 	private static final int MOVE_DY_LIMIT = 1;
 
 	private final Random rnd;
+
+	private final String id;
 
 	private final MatchConfig config;
 
@@ -44,17 +47,18 @@ public class Match<K> {
 	// current round, starting from 1
 	private int round;
 
-	public Match(MatchMap map, MatchConfig config, Map<K, String> botNames) {
-		this(map, config, botNames, Collections.emptyList());
+	public Match(String id, MatchMap map, MatchConfig config, Map<K, String> botNames) {
+		this(id, map, config, botNames, Collections.emptyList());
 	}
 
-	public Match(MatchMap map, MatchConfig config, Map<K, String> botNames,
+	public Match(String id, MatchMap map, MatchConfig config, Map<K, String> botNames,
 			List<MatchListener<K>> listeners) {
 		Check.notNull(map);
 		Check.notNull(config);
 		Check.condition(!botNames.isEmpty());
 
 		this.rnd = new Random(config.getRandomSeed());
+		this.id = Strings.emptyToNull(id);
 		this.config = config;
 		this.map = map;
 		this.mapIndex = new MapIndex(map);
@@ -62,7 +66,7 @@ public class Match<K> {
 			this.listeners.addAll(listeners);
 
 		// notify: match started
-		this.listeners.forEach(l -> l.matchStarted(map, config, botNames));
+		this.listeners.forEach(l -> l.matchStarted(id, map, config, botNames));
 		// init bots
 		initBots(botNames);
 		// spawn initial coins
@@ -73,8 +77,8 @@ public class Match<K> {
 		this.listeners.forEach(l -> l.matchRound(round));
 	}
 
-	public int getRound() {
-		return round;
+	public String getId() {
+		return id;
 	}
 
 	public MatchConfig getConfig() {
@@ -91,6 +95,10 @@ public class Match<K> {
 
 	public Set<Point> getCoins() {
 		return Collections.unmodifiableSet(coins);
+	}
+
+	public int getRound() {
+		return round;
 	}
 
 	public boolean isActive() {
