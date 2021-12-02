@@ -287,6 +287,7 @@ spawn_position {X} {Y}
 
 ```
 match
+match_id {MATCH_ID}
 num_bots {NUM_BOTS}
 ##MatchConfig
 mode {MATCH_MODE}
