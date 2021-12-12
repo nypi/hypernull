@@ -58,9 +58,9 @@ public class MatchConfig {
 
 	public static class Builder {
 
-		private long randomSeed = 42;
+		private long randomSeed = System.currentTimeMillis();
 
-		private int numRounds = 200;
+		private int numRounds = 500;
 
 		private MatchMode mode = MatchMode.FRIENDLY;
 

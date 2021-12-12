@@ -19,7 +19,6 @@ import ru.croccode.hypernull.io.SocketSession;
 import ru.croccode.hypernull.map.MapRegistry;
 import ru.croccode.hypernull.map.MapStore;
 import ru.croccode.hypernull.map.RandomMap;
-import ru.croccode.hypernull.map.RandomMapRegistry;
 import ru.croccode.hypernull.match.Match;
 import ru.croccode.hypernull.match.MatchConfig;
 import ru.croccode.hypernull.match.MatchListener;
@@ -112,7 +111,7 @@ public class HyperNull implements Runnable, Closeable {
 
 	private MatchConfig buildMatchConfig(MatchMode mode, MatchMap map) {
 		return MatchConfig.newBuilder()
-				.setNumRounds(200)
+				.setNumRounds(500)
 				.setMode(mode)
 				.setMoveTimeLimit(1_000L)
 				.setCoinSpawnPeriod(5)
