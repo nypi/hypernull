@@ -1,0 +1,28 @@
+#playback-slider .thumb{
+	-fx-pref-height: 16;
+	-fx-pref-width: 10;
+	-fx-padding: 0;
+	-fx-background-image: none;
+	-fx-background-color: rgb(200, 200, 200);
+	-fx-background-radius: 0 0 0 0;
+}
+
+#playback-slider .track {
+	-fx-pref-height: 8;
+	-fx-background-color: rgb(99, 99, 99);
+	-fx-background-radius: 0 0 0 0;
+}
+
+.check-box .box {
+	-fx-background-color: rgb(99, 99, 99);
+	-fx-border-color: none;
+	-fx-border-radius: 0;
+}
+
+.check-box:selected .box {
+	-fx-background-color: rgb(99, 99, 99);
+}
+
+.check-box:selected .mark {
+	-fx-background-color: rgb(200, 200, 200);
+}

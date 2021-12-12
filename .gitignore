@@ -3,3 +3,4 @@ target/
 out/
 .idea/
 *.iml
+matchlogs/

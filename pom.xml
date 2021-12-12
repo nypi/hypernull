@@ -10,6 +10,7 @@
 	<modules>
 		<module>common</module>
 		<module>server</module>
+		<module>player</module>
 		<module>starter-bot</module>
 	</modules>
 	<properties>
