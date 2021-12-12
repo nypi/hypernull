@@ -18,15 +18,15 @@ public class RandomMap implements MatchMap {
 	private static final int MIN_HEIGHT = 20;
 	private static final int MAX_HEIGHT = 40;
 
-	private static final int MIN_BLOCKS = 6;
-	private static final int MAX_BLOCKS = 30;
+	private static final int MIN_BLOCKS = 12;
+	private static final int MAX_BLOCKS = 32;
 	private static final int MIN_BLOCK_WIDTH = 2;
 	private static final int MAX_BLOCK_WIDTH = 8;
 	private static final int MIN_BLOCK_HEIGHT = 2;
 	private static final int MAX_BLOCK_HEIGHT = 8;
 
-	private static final int MIN_VIEW_RADIUS = 5;
-	private static final int MAX_VIEW_RADIUS = 7;
+	private static final int MIN_VIEW_RADIUS = 8;
+	private static final int MAX_VIEW_RADIUS = 15;
 	private static final int MIN_ATTACK_RADIUS = 3;
 	private static final int MAX_ATTACK_RADIUS = 5;
 	private static final int MIN_MINING_RADIUS = 1;
