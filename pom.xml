@@ -12,7 +12,8 @@
 		<module>server</module>
 		<module>player</module>
 		<module>starter-bot</module>
-	</modules>
+        <module>CreateMap</module>
+    </modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>11</maven.compiler.release>
