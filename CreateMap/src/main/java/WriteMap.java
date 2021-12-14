@@ -24,24 +24,18 @@ public class WriteMap {
         writerOnTxt.write("mining_radius "+settings.getMining_radius()+"\n");
         writerOnTxt.write("attack_radius "+settings.getAtack_radius()+"\n");
 
-        Writer writerOnVisual = new FileWriter("/Users/alekseyzhizhin/Documents/GitHub/hypernull/CreateMap/src/main/java/map/VisualMap.txt");
         for (int i = 0; i < MAP.length; i++) {
             for (int j = 0; j < MAP[0].length; j++) {
                 if (MAP[i][j]) {
-                    writerOnVisual.write("▇");
                     writerOnTxt.write("Block " + i + " " + j + "\n");
                 }else {
-                    writerOnVisual.write("◌");
                 }
             }
-            writerOnVisual.write("\n");
         }
         for (int i=0;i<ListOfSpawn.size();i++){
             writerOnTxt.write("spawn_position "+ListOfSpawn.get(i).getX()+" "+ListOfSpawn.get(i).getY()+"\n");
         }
-        writerOnVisual.flush();
         writerOnTxt.flush();
-        writerOnVisual.close();
         writerOnTxt.close();
     }
 

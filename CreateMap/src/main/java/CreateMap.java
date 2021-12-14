@@ -54,35 +54,33 @@ public class CreateMap {
             //выбираем случайным образом в какую сторону сдвинемся от полученной точки
             // (влево/вправо по Х, или вверх/вниз по У)
             int rnd2 = (int) (Math.random() * 4);
-            int d = 2;
-            int k = 1;
             switch (rnd2) {
                 //Сдвигаемся в зависимости от полученного рандомного положения
                 case (0):
-                    if ((0 <= newPoint.getX() - d && newPoint.getX() + d < MAP_HEIGHT) && !MAP[newPoint.getX() - d][newPoint.getY()]) {
+                    if ((0 <= newPoint.getX() - 2 && newPoint.getX() + 2 < MAP_HEIGHT) && !MAP[newPoint.getX() - 2][newPoint.getY()]) {
                         MAP[newPoint.getX()][newPoint.getY()] = true;
-                        MAP[newPoint.getX() + k][newPoint.getY()] = true;
+                        MAP[newPoint.getX() + 1][newPoint.getY()] = true;
                         addPoints(newPoint);
                         break;
                     }
                 case (1):
-                    if ((0 <= newPoint.getX() - d && newPoint.getX() + d < MAP_HEIGHT) && !MAP[newPoint.getX() + d][newPoint.getY()]) {
+                    if ((0 <= newPoint.getX() - 2 && newPoint.getX() + 2 < MAP_HEIGHT) && !MAP[newPoint.getX() + 2][newPoint.getY()]) {
                         MAP[newPoint.getX()][newPoint.getY()] = true;
-                        MAP[newPoint.getX() - k][newPoint.getY()] = true;
+                        MAP[newPoint.getX() - 1][newPoint.getY()] = true;
                         addPoints(newPoint);
                         break;
                     }
                 case (2):
-                    if (0 <= newPoint.getY() - d && newPoint.getY() + d < MAP_WIDTH && !MAP[newPoint.getX()][newPoint.getY() - d]) {
+                    if (0 <= newPoint.getY() - 2 && newPoint.getY() + 2 < MAP_WIDTH && !MAP[newPoint.getX()][newPoint.getY() - 2]) {
                         MAP[newPoint.getX()][newPoint.getY()] = true;
-                        MAP[newPoint.getX()][newPoint.getY() + k] = true;
+                        MAP[newPoint.getX()][newPoint.getY() + 1] = true;
                         addPoints(newPoint);
                         break;
                     }
                 case (3):
-                    if ((0 <= newPoint.getY() - d && newPoint.getY() + d < MAP_WIDTH) && !MAP[newPoint.getX()][newPoint.getY() + d]) {
+                    if ((0 <= newPoint.getY() - 2 && newPoint.getY() + 2 < MAP_WIDTH) && !MAP[newPoint.getX()][newPoint.getY() + 2]) {
                         MAP[newPoint.getX()][newPoint.getY()] = true;
-                        MAP[newPoint.getX()][newPoint.getY() - k] = true;
+                        MAP[newPoint.getX()][newPoint.getY() - 1] = true;
                         addPoints(newPoint);
                         break;
                     }
