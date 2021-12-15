@@ -2,12 +2,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class CreateMap {
-    private static int MAP_WIDTH;
-    private static int MAP_HEIGHT;
-    private static boolean[][] MAP;
-    private static Queue<Point> queuePoint;
-    private static int countBot;
-    public static List<Point> listOfSpawn;
+    private int MAP_WIDTH;
+    private int MAP_HEIGHT;
+    private boolean[][] MAP;
+    private Queue<Point> queuePoint;
+    private int countBot;
+    private List<Point> listOfSpawn;
 
 
     public CreateMap(int height, int width) {
@@ -33,7 +33,7 @@ public class CreateMap {
      * создает список этих точек, случайным образом выбирает в какую точку может пойти, удаляет выбранную точку
      * из нашего списка, отправляет наш список в очередь точек, для выбранной точки метод начинается сначала
      * */
-    public static void createLabirint() {
+    public  void createLabirint() {
         while (!queuePoint.isEmpty()) {
             //получаем точку
             Point point = queuePoint.poll();
@@ -93,7 +93,7 @@ public class CreateMap {
 
     //метод изменяет наш лабиринт, "дробя" его на свободные ходы
     //т.е рандомим точку, проверяем есть ли в ней препятствие, если есть удаляем препятствие смешаемся по оси У
-    public static void changeMap() {
+    public void changeMap() {
         for (int i = 0; i < MAP_HEIGHT * 2; i++) {
             int rnd1 = (int) (Math.random() * MAP_HEIGHT-1);
             int rnd2 = (int) (Math.random() * MAP_WIDTH-1);
@@ -109,7 +109,7 @@ public class CreateMap {
     }
 
     //задаем количество ботов и координаты их спавна
-    public static void setSpawnBot() {
+    public void setSpawnBot() {
         //проверям размер карты и исходя из него задаем количество ботов
         if (0 < MAP_WIDTH * MAP_HEIGHT && MAP_WIDTH * MAP_HEIGHT < 100) {
             countBot = 2;
@@ -142,7 +142,7 @@ public class CreateMap {
     /*
      * Метод реализует список точек, в которые мы можем пойти от изначальной точки
      * */
-    public static List<Point> addPointsList(Point point) {
+    public List<Point> addPointsList(Point point) {
         List<Point> list = new ArrayList<>();
         if (0 <= point.getX() - 2 && !MAP[point.getX() - 2][point.getY()]) {
             list.add(new Point(point.getX() - 2, point.getY()));
@@ -162,7 +162,7 @@ public class CreateMap {
     /*
      * Добавляем точки, в которые можем пойти, в нашу очередь
      * */
-    public static void addPoints(Point point) {
+    public void addPoints(Point point) {
         if (0 <= point.getX() - 2 && !MAP[point.getX() - 2][point.getY()]) {
             queuePoint.add(new Point(point.getX() - 2, point.getY()));
         }
@@ -178,7 +178,7 @@ public class CreateMap {
     }
 
     //записываем наши данные в файлы
-    public static void PrintMap() {
+    public void PrintMap() {
         try {
             WriteMap writeMap = new WriteMap(MAP, countBot, listOfSpawn);
             writeMap.writeMap();

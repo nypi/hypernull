@@ -4,9 +4,9 @@ import java.io.Writer;
 import java.util.List;
 
 public class WriteMap {
-    private static boolean[][] MAP;
-    private static int CountBot;
-    private static List<Point> ListOfSpawn;
+    private boolean[][] MAP;
+    private int CountBot;
+    private List<Point> ListOfSpawn;
 
     public WriteMap(boolean[][] MAP,int countBot,List<Point> listOfSpawn) {
         this.MAP = MAP;
@@ -15,14 +15,14 @@ public class WriteMap {
     }
 
 
-    public static void writeMap() throws IOException {
+    public void writeMap() throws IOException {
         InitSettings settings=new InitSettings(MAP.length,MAP[0].length,CountBot,ListOfSpawn);
-        String nameOfFile="map_"+CountBot+".map";
-        Writer writerOnTxt=new FileWriter("/Users/alekseyzhizhin/Documents/GitHub/hypernull/CreateMap/src/main/java/map/"+nameOfFile);
+        String nameOfFile="maze_"+CountBot+"_6.map";
+        Writer writerOnTxt=new FileWriter("/Users/alekseyzhizhin/Documents/GitHub/hypernull/CreateMap/src/main/java/maze/"+nameOfFile);
         writerOnTxt.write("map_size "+settings.getWIDTH()+" "+settings.getHEIGHT()+"\n");
-        writerOnTxt.write("view_radius "+settings.getView_radius()+"\n");
-        writerOnTxt.write("mining_radius "+settings.getMining_radius()+"\n");
-        writerOnTxt.write("attack_radius "+settings.getAtack_radius()+"\n");
+        writerOnTxt.write("view_radius "+settings.getViewRadius()+"\n");
+        writerOnTxt.write("mining_radius "+settings.getMiningRadius()+"\n");
+        writerOnTxt.write("attack_radius "+settings.getAtackRadius()+"\n");
 
         for (int i = 0; i < MAP.length; i++) {
             for (int j = 0; j < MAP[0].length; j++) {
