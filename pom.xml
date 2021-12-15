@@ -12,7 +12,8 @@
 		<module>server</module>
 		<module>player</module>
 		<module>starter-bot</module>
-        <module>CreateMap</module>
+		<module>map-generator</module>
+        <module>maze-generator</module>
     </modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
