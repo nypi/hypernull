@@ -277,17 +277,16 @@ public final class Messages {
 	public static Update parseUpdate(List<String> lines) {
 		checkMessage(lines, "update");
 		Update message = new Update();
+		message.setBots(new HashMap<>());
+		message.setBotCoins(new HashMap<>());
+		message.setBlocks(new HashSet<>());
+		message.setCoins(new HashSet<>());
 		parseParameters(lines, (name, values) -> {
 			switch (name) {
 				case "round":
 					message.setRound(Integer.parseInt(values.get(0)));
 					break;
 				case "bot":
-					if (message.getBots() == null)
-						message.setBots(new HashMap<>());
-					if (message.getBotCoins() == null)
-						message.setBotCoins(new HashMap<>());
-
 					Integer botId = Integer.parseInt(values.get(3));
 					message.getBots().put(botId, new Point(
 							Integer.parseInt(values.get(0)),
@@ -295,17 +294,11 @@ public final class Messages {
 					message.getBotCoins().put(botId, Integer.parseInt(values.get(2)));
 					break;
 				case "block":
-					if (message.getBlocks() == null)
-						message.setBlocks(new HashSet<>());
-
 					message.getBlocks().add(new Point(
 							Integer.parseInt(values.get(0)),
 							Integer.parseInt(values.get(1))));
 					break;
 				case "coin":
-					if (message.getCoins() == null)
-						message.setCoins(new HashSet<>());
-
 					message.getCoins().add(new Point(
 							Integer.parseInt(values.get(0)),
 							Integer.parseInt(values.get(1))));
