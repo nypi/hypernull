@@ -18,11 +18,10 @@ class HypernullClient:
                 f'Client v{self.version}, but Server v{msg.protocol_version}'
             )
 
-    def get(self) -> messages.MessageBase:
+    def get(self) -> factory.Message:
         data = self.session.read()
         return factory.MessageFactory.load(data)
 
-    def send(self, msg: messages.MessageBase):
-        print(msg.dump())
-
-        # self.session.write(msg + 'end')
+    def send(self, msg: messages.MessageBase) -> None:
+        data = msg.dump()
+        self.session.write(data)

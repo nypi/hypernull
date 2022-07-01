@@ -7,7 +7,7 @@ class BotMatchRunner:
         self.bot = bot
         self.client = client
 
-    def _register(self):
+    def _register(self) -> None:
         self.client.send(
             messages.Register(
                 bot_name=self.bot.name,
@@ -16,5 +16,11 @@ class BotMatchRunner:
             )
         )
 
-    def run(self):
+    def run(self) -> None:
         self._register()
+        match_started: messages.MatchStarted = self.client.get()
+
+        while True:
+            message: messages.Update | messages.MatchOver = self.client.get()
+            # if isinstance(message, messages.MatchOver):
+            break

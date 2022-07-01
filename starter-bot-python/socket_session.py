@@ -14,5 +14,5 @@ class SocketSession:
         # TODO: loop read
         return self.socket.recv(4096).decode().strip().split('\n')
 
-    def write(self, data: str):
-        self.socket.send(data)
+    def write(self, data: str) -> None:
+        self.socket.send(data.encode())
