@@ -33,9 +33,14 @@ class MatchStarted(MessageBase):
 @dataclass
 class Update(MessageBase):
     round: int
-    bot: list[list[int]] = field(default_factory=list)
+    bot: list[extra_types.BotInfo] = field(default_factory=list)
     block: list[extra_types.XY] = field(default_factory=list)
     coin: list[extra_types.XY] = field(default_factory=list)
+
+
+@dataclass
+class Move(MessageBase):
+    offset: extra_types.XY
 
 
 @dataclass

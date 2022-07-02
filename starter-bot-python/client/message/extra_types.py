@@ -13,4 +13,7 @@ class XY:
     y: int
 
 
-# class Block:
+@dataclass
+class BotInfo(XY):
+    coins: int
+    id: int

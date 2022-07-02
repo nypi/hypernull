@@ -11,7 +11,7 @@ class SocketSession:
         self.socket.close()
 
     def read(self) -> list[str]:
-        # TODO: loop read
+        # TODO: do we need loop read until end of message?
         return self.socket.recv(4096).decode().strip().split('\n')
 
     def write(self, data: str) -> None:

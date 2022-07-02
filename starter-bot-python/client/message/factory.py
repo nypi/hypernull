@@ -1,7 +1,7 @@
 import dataclasses
 import inspect
 import types
-import typing
+from collections import defaultdict
 from typing import TypeVar
 
 from . import messages
@@ -19,7 +19,6 @@ class MessageFactory:
     def load(cls, data: list[str]) -> Message:
         if not data:
             raise Exception('got empty data')
-        print(data)  # TODO delete
 
         command = cls._to_camel_case(data[0])
         if command not in cls._known_message_types:
@@ -30,23 +29,31 @@ class MessageFactory:
             field.name: field.type for field in dataclasses.fields(message_class)
         }
 
-        params = {}
+        params = defaultdict(list)
         for row in data[1:-1]:
             name, *value = row.split()
-            param_type = field_name_type_mapping[name]
 
-            if isinstance(param_type, types.GenericAlias):
-                param_type = param_type.__origin__
-
-            if param_type is not list:
-                params[name] = param_type(*value)
+            container, real_type = cls._get_type_and_container(
+                field_type=field_name_type_mapping[name]
+            )
+            if container is None:
+                params[name] = real_type(*value)
+            elif container is list:
+                params[name].append(real_type(*value))
             else:
-                if name not in params:
-                    params[name] = [value]
-                else:
-                    params[name].append(value)
-        print(params)
+                raise Exception(f'cannot handle {command}:{name}:{container}')
+
         return message_class(**params)
+
+    @staticmethod
+    def _get_type_and_container(field_type) -> tuple[type | None, type]:
+        if isinstance(field_type, types.GenericAlias):
+            container = field_type.__origin__
+            real_type = field_type.__args__[0]
+        else:
+            container = None
+            real_type = field_type
+        return container, real_type
 
     @staticmethod
     def _to_camel_case(snake_case: str) -> str:

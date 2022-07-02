@@ -10,7 +10,9 @@ class MessageBase:
     def dump(self) -> str:
         command = self.type()
         params = '\n'.join(
-            f'{k} {" ".join(map(str, v)) if isinstance(v, list) else v}'
-            for k, v in asdict(self).items() if v
+            f'{k} {" ".join(map(str, v.values())) if isinstance(v, dict) else v}'
+            for k, v in asdict(self).items() if v not in [None, '']
         )
-        return '\n'.join((command, params, 'end')) + '\n'
+        return f'{command}\n' \
+               f'{params}\n' \
+               f'end\n'
