@@ -6,15 +6,20 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Predicate;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -95,6 +100,13 @@ public class App extends Application {
 		});
 
 		Scene scene = new Scene(vbox);
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				if (ke.getCode() == KeyCode.ESCAPE) {
+					primaryStage.close();
+				}
+			}
+		});
 		URL style = getClass().getResource("/style.css");
 		if (style != null) {
 			scene.getStylesheets().add(style.toExternalForm());
@@ -104,6 +116,16 @@ public class App extends Application {
 		primaryStage.setMinWidth(800);
 		primaryStage.setMinHeight(600);
 		primaryStage.show();
+
+		List<String> args = getParameters().getRaw();
+		if (!args.isEmpty()) {
+			List<File> file = Collections.singletonList(new File(args.get(0)));
+			try {
+				queueReplays(file);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	@Override
