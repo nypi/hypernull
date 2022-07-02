@@ -29,7 +29,7 @@ class SocketSession:
 
         return data.decode().split('\n')
 
-    def _find_end_index(self):
+    def _find_end_index(self) -> int:
         return self.buffer.find(b'end\n', len(self.buffer) - self._buffer_size)
 
     def write(self, data: str) -> None:
