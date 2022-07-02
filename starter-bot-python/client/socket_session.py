@@ -11,8 +11,10 @@ class SocketSession:
         self.socket.close()
 
     def read(self) -> list[str]:
-        # TODO: do we need loop read until end of message?
-        return self.socket.recv(4096).decode().strip().split('\n')
+        data = bytearray()
+        while not data.endswith(b'end\n'):
+            data += self.socket.recv(4096)
+        return data.removesuffix(b'\n').decode().split('\n')
 
     def write(self, data: str) -> None:
-        self.socket.send(data.encode())
+        self.socket.sendall(data.encode())

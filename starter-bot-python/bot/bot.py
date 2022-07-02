@@ -18,6 +18,7 @@ class Bot:
 
     def on_match_started(self, match_info: MatchStarted):
         self.match_info = match_info
+        print(match_info)
         print('Match started!')
 
     def on_update(self, update: Update) -> tuple[int, int]:

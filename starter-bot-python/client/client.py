@@ -23,12 +23,10 @@ class HypernullClient:
 
     def get(self) -> factory.Message:
         data = self.session.read()
-        logging.debug('IN:', data)
         return factory.MessageFactory.load(data)
 
     def send(self, msg: messages.MessageBase) -> None:
         data = msg.dump()
-        logging.debug('OUT:', data)
         self.session.write(data)
 
     def register(self, bot: Bot) -> None:

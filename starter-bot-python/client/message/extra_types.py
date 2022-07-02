@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 from enum import Enum
+from typing import NamedTuple
 
 
 class Mode(str, Enum):
@@ -7,13 +7,13 @@ class Mode(str, Enum):
     DEATHMATCH = 'DEATHMATCH'
 
 
-@dataclass
-class XY:
+class XY(NamedTuple):
     x: int
     y: int
 
 
-@dataclass
-class BotInfo(XY):
+class BotInfo(NamedTuple):
+    x: int
+    y: int
     coins: int
     id: int
