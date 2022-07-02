@@ -1,6 +1,4 @@
-import logging
-
-from bot.bot import Bot
+from .bot_base import BotImpl
 from .socket_session import SocketSession
 from .message import factory, messages, extra_types
 
@@ -29,7 +27,7 @@ class HypernullClient:
         data = msg.dump()
         self.session.write(data)
 
-    def register(self, bot: Bot) -> None:
+    def register(self, bot: BotImpl) -> None:
         register = messages.Register(
             bot_name=bot.name,
             bot_secret=bot.secret,

@@ -38,7 +38,8 @@ class MessageFactory:
             if container is None:
                 params[name] = real_type(*value)
             elif container is list:
-                params[name].append(real_type(*value))
+                # map(int, ) assumes that all nested types has only int fields
+                params[name].append(real_type(*map(int, value)))
             else:
                 raise Exception(f'cannot handle {command}:{name}:{container}')
 
