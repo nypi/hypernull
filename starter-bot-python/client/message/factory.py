@@ -38,7 +38,7 @@ class MessageFactory:
             if container is None:
                 params[name] = real_type(*value)
             elif container is list:
-                params[name].append(real_type(*map(int, value)))
+                params[name].append(real_type(*value))
             else:
                 raise Exception(f'cannot handle {command}:{name}:{container}')
 
@@ -57,10 +57,3 @@ class MessageFactory:
     @staticmethod
     def _to_camel_case(snake_case: str) -> str:
         return ''.join(t.title() for t in snake_case.split('_'))
-
-    # @staticmethod
-    # def _to_int_if_possible(value):
-    #     try:
-    #         return int(value)
-    #     except ValueError:
-    #         return value
