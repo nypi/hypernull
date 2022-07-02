@@ -29,10 +29,6 @@ class MatchStarted(MessageBase):
     match_id: int = 0
     num_bots: int = 0
 
-    def __post_init__(self):
-        self.map_size.x = int(self.map_size.x)
-        self.map_size.y = int(self.map_size.y)
-
 
 @dataclass
 class Update(MessageBase):
