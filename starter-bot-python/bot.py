@@ -10,7 +10,7 @@ mode = Mode.FRIENDLY
 
 class Bot(BotBase):
     # Старт
-    def on_match_start(self, match_info: MatchStarted):
+    def on_match_start(self, match_info: MatchStarted) -> None:
         # Правила матча
         self.match_info = match_info
         self.id = match_info.your_id

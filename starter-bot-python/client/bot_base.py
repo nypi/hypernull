@@ -16,7 +16,7 @@ class BotBase:
     match_info: MatchStarted = field(init=False)
     id: int = field(init=False)
 
-    def on_match_start(self, match_info: MatchStarted):
+    def on_match_start(self, match_info: MatchStarted) -> None:
         raise NotImplementedError
 
     def on_update(self, update: Update) -> tuple[int, int]:
