@@ -3,6 +3,7 @@ package ru.croccode.hypernull.bot;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import ru.croccode.hypernull.domain.MatchMode;
@@ -19,21 +20,24 @@ public class StarterBot implements Bot {
 
 	private static final Random rnd = new Random(System.currentTimeMillis());
 
+	private final String name;
+
 	private final MatchMode mode;
 
 	private Offset moveOffset;
 
 	private int moveCounter = 0;
 
-	public StarterBot(MatchMode mode) {
+	public StarterBot(String name, MatchMode mode) {
+		this.name = name;
 		this.mode = mode;
 	}
 
 	@Override
 	public Register onHello(Hello hello) {
 		Register register = new Register();
+		register.setBotName(name);
 		register.setMode(mode);
-		register.setBotName("starter-bot");
 		return register;
 	}
 
@@ -61,13 +65,20 @@ public class StarterBot implements Bot {
 	}
 
 	public static void main(String[] args) throws IOException {
+		String configPath = args.length > 0
+				? args[0]
+				: "bot.properties";
+		BotConfig botConfig = BotConfig.load(Paths.get(configPath));
+
 		Socket socket = new Socket();
 		socket.setTcpNoDelay(true);
 		socket.setSoTimeout(300_000);
-		socket.connect(new InetSocketAddress("localhost", 2021));
+		socket.connect(new InetSocketAddress(
+				botConfig.getServerHost(),
+				botConfig.getServerPort()));
 
 		SocketSession session = new SocketSession(socket);
-		StarterBot bot = new StarterBot(MatchMode.FRIENDLY);
+		StarterBot bot = new StarterBot(botConfig.getBotName(), botConfig.getMode());
 		new BotMatchRunner(bot, session).run();
 	}
 }
