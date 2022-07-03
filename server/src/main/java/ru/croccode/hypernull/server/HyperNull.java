@@ -6,12 +6,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import ru.croccode.hypernull.domain.MatchMap;
 import ru.croccode.hypernull.domain.MatchMode;
@@ -35,7 +37,10 @@ public class HyperNull implements Runnable, Closeable {
 	private final MapRegistry mapRegistry;
 
 	private final Server server;
+
 	private final String matchLogsFolder;
+
+	private final boolean matchLogStdout;
 
 	public HyperNull(Properties properties) throws IOException {
 		Check.notNull(properties);
@@ -44,12 +49,14 @@ public class HyperNull implements Runnable, Closeable {
 				properties.getProperty("server.port", "2021"));
 		matchLogsFolder = properties.getProperty("match.log.folder","./matchlogs/");
 		System.out.println("Match logs folder was set to: " + matchLogsFolder);
+		matchLogStdout = Boolean.parseBoolean(
+				properties.getProperty("match.log.stdout", "false"));
+		System.out.println("Log matches to stdout: " + matchLogStdout);
 		String mapsFolder = properties.getProperty("maps.folder","./maps/");
 		System.out.println("Maps folder was set to: " + mapsFolder);
 		mapRegistry = MapStore.load(Paths.get(mapsFolder));
 		this.server = new Server(serverPort);
 		System.out.println("Server started on port: " + serverPort);
-		System.out.println("Server logs output: STDOUT");
 	}
 
 	@Override
@@ -100,11 +107,17 @@ public class HyperNull implements Runnable, Closeable {
 		}
 		MatchConfig config = buildMatchConfig(mode, map);
 		try (MatchFileLogger<Integer> fileLogger = new MatchFileLogger<>(matchId, this.matchLogsFolder)) {
-			List<MatchListener<Integer>> listeners = Arrays.asList(
-				new AsciiMatchPrinter(),
-				fileLogger
-			);
+			List<MatchListener<Integer>> listeners = new ArrayList<>();
+			if (matchLogStdout) {
+				listeners.add(new AsciiMatchPrinter());
+			}
+			listeners.add(fileLogger);
 			Match<Integer> match = new Match<>(matchId, map, config, botNames, listeners);
+
+			String bots = matchRequests.stream()
+					.map(r -> r.getBotName() + " [" + r.getMode() + "]")
+					.collect(Collectors.joining(", "));
+			System.out.println("Starting match " + matchId + ": " + bots);
 			new MatchRunner(match, botSessions).run();
 		}
 	}

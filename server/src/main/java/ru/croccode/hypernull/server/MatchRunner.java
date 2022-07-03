@@ -107,7 +107,7 @@ public class MatchRunner implements Runnable {
 		}));
 	}
 
-	private CompletableFuture<Move> waitForMove(Integer botKey) throws IOException {
+	private CompletableFuture<Move> waitForMove(Integer botKey) {
 		SocketSession session = botSessions.get(botKey);
 		if (session == null)
 			return CompletableFuture.completedFuture(null);
