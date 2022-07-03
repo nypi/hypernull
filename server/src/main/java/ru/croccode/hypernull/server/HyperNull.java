@@ -132,7 +132,7 @@ public class HyperNull implements Runnable, Closeable {
 		Properties properties = new Properties();
 		Path path = Paths.get(configPath);
 		if (Files.exists(path)) {
-			try (InputStream in = Files.newInputStream(Paths.get(configPath))) {
+			try (InputStream in = Files.newInputStream(path)) {
 				properties.load(in);
 			}
 		}
