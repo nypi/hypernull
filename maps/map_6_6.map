@@ -1,7 +1,7 @@
 map_size 50 50
-view_radius 7
-mining_radius 6
-attack_radius 5
+view_radius 9
+mining_radius 2
+attack_radius 3
 block 49 3
 block 49 4
 block 49 5
