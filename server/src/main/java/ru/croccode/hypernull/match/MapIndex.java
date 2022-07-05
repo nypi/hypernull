@@ -29,10 +29,19 @@ public class MapIndex {
 						: freeBuilder;
 				Point value = new Point(x, y);
 				target.add(new Point(x, y), value);
+
+				// reflections of the
+				// map quadrants:
+				// 4 3 4 3
+				// 1 2 1 2
+				// 4 3 4 3
+				// 1 2 1 2
+
 				int dx = x < w / 2 ? w : -w;
-				target.add(new Point(x + dx, y), value);
 				int dy = y < h / 2 ? h : -h;
+				target.add(new Point(x + dx, y), value);
 				target.add(new Point(x, y + dy), value);
+				target.add(new Point(x + dx, y + dy), value);
 			}
 		}
 
