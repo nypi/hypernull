@@ -30,9 +30,9 @@ import ru.croccode.hypernull.util.Silent;
 public class HyperNull implements Runnable, Closeable {
 
 	private static final int MIN_FRIENDLY_BOTS = 1;
-	private static final int MAX_FRIENDLY_BOTS = 4;
+	private static final int MAX_FRIENDLY_BOTS = 2;
 	private static final int MIN_DEATHMATCH_BOTS = 2;
-	private static final int MAX_DEATHMATCH_BOTS = 4;
+	private static final int MAX_DEATHMATCH_BOTS = 2;
 
 	private final MapRegistry mapRegistry;
 
