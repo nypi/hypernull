@@ -119,7 +119,7 @@ public class HyperNull implements Runnable, Closeable {
 					.map(r -> r.getBotName() + " [" + r.getMode() + "]")
 					.collect(Collectors.joining(", "));
 			System.out.println("Starting match " + matchId + ": " + bots);
-			ThreadPools.matchPool().submit(new MatchRunner(match, botSessions));
+			new MatchRunner(match, botSessions).run();
 		}
 	}
 
