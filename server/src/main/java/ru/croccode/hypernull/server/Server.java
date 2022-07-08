@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -95,6 +97,21 @@ public class Server implements Closeable {
 	private void offerRequest(MatchRequest request) {
 		lock.lock();
 		try {
+			// discard previous match requests of the bot (by name)
+			queues.values().forEach(q -> {
+				Iterator<MatchRequest> it = q.iterator();
+				while (it.hasNext()) {
+					MatchRequest prev = it.next();
+					if (!Objects.equals(prev.getBotName(), request.getBotName()))
+						continue;
+					// close request session
+					try {
+						prev.getSession().close();
+					} catch (IOException ignore) {
+					}
+					it.remove();
+				}
+			});
 			queues
 					.computeIfAbsent(request.getMode(), k -> new ArrayDeque<>())
 					.offer(request);

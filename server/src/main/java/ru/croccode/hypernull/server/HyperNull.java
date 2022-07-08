@@ -63,18 +63,19 @@ public class HyperNull implements Runnable, Closeable {
 	public void run() {
 		List<MatchMode> modes = Arrays.asList(MatchMode.FRIENDLY, MatchMode.DEATHMATCH);
 		while (true) {
-			List<MatchRequest> matchRequests = Collections.emptyList();
 			Collections.shuffle(modes);
+			boolean matchStarted = false;
 			for (MatchMode mode : modes) {
-				matchRequests = server.pollRequests(
+				List<MatchRequest> matchRequests = server.pollRequests(
 						mode,
 						mode == MatchMode.FRIENDLY ? MIN_FRIENDLY_BOTS : MIN_DEATHMATCH_BOTS,
 						mode == MatchMode.FRIENDLY ? MAX_FRIENDLY_BOTS : MAX_DEATHMATCH_BOTS);
 				if (!matchRequests.isEmpty()) {
 					runMatch(mode, matchRequests);
+					matchStarted = true;
 				}
 			}
-			if (matchRequests.isEmpty()) {
+			if (!matchStarted) {
 				try {
 					Thread.sleep(1_000L);
 				} catch (InterruptedException e) {
@@ -118,7 +119,7 @@ public class HyperNull implements Runnable, Closeable {
 					.map(r -> r.getBotName() + " [" + r.getMode() + "]")
 					.collect(Collectors.joining(", "));
 			System.out.println("Starting match " + matchId + ": " + bots);
-			new MatchRunner(match, botSessions).run();
+			ThreadPools.matchPool().submit(new MatchRunner(match, botSessions));
 		}
 	}
 
