@@ -4,6 +4,7 @@ import socket
 
 class SocketSession:
     _buffer_size = 8192
+    _timeout_move = 'move\noffset 0 0\nend\n'
 
     def __init__(self, host: str, port: int):
         self.socket = socket.socket()
@@ -25,12 +26,13 @@ class SocketSession:
 
         if len(self.buffer) > 0:
             logging.warning('skipping round, seems like your bot had timed out')
+            self.write(self._timeout_move)
             return self.read()
 
         return data.decode().split('\n')
 
     def _find_end_index(self) -> int:
-        return self.buffer.find(b'end\n', len(self.buffer) - self._buffer_size)
+        return self.buffer.find(b'end\n', len(self.buffer) - self._buffer_size - 4)
 
     def write(self, data: str) -> None:
         self.socket.sendall(data.encode())
